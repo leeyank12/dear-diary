@@ -16,7 +16,13 @@ const app = express();
 // Middleware
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
-
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Dear Diary Backend is Running 🚀',
+    status: 'OK'
+  });
+});
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/diary', require('./routes/diary'));
@@ -24,7 +30,7 @@ app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/reminders', require('./routes/reminders'));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
