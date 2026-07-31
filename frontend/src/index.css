@@ -1,0 +1,1318 @@
+/* CSS Reset and CSS Variables - Royal & Aesthetic Palette */
+:root {
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-handwriting: 'Caveat', 'Kalam', cursive;
+  --font-serif: 'Playfair Display', serif;
+
+  /* Royal Aesthetic Colors (Decreased harsh darks & vibrant neon, increased regal tones) */
+  --bg-primary: #090a12; /* Rich Imperial Obsidian */
+  --bg-secondary: #121526; /* Deep Midnight Velvet */
+  --bg-card: rgba(18, 21, 38, 0.68); /* Royal Velvet Glass */
+  --bg-card-hover: rgba(26, 30, 54, 0.82);
+  --bg-input: rgba(12, 14, 26, 0.85);
+  
+  --border-color: rgba(217, 119, 6, 0.12); /* Subtle Gold Tinted Border */
+  --border-hover: rgba(168, 85, 247, 0.3);
+  --border-focus: rgba(168, 85, 247, 0.6);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+
+  /* Mood Specific Colors (Aesthetic & Muted Regal Tones) */
+  --color-ecstatic: #0d9488; /* Emerald Teal */
+  --color-happy: #10b981; /* Soft Mint */
+  --color-neutral: #7e22ce; /* Imperial Amethyst */
+  --color-sad: #2563eb; /* Royal Sapphire */
+  --color-stressed: #be123c; /* Royal Crimson */
+
+  /* UI Gradients (Regal Imperial Purple, Velvet & Amber Gold) */
+  --grad-primary: linear-gradient(135deg, #6b21a8 0%, #7e22ce 50%, #d97706 100%);
+  --grad-exotic: linear-gradient(135deg, #581c87 0%, #7e22ce 50%, #be123c 100%);
+  --grad-gold: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+  --grad-paper: linear-gradient(180deg, rgba(22, 25, 46, 0.92) 0%, rgba(14, 16, 30, 0.96) 100%);
+  --grad-premium-glow: radial-gradient(circle at top left, rgba(126, 34, 206, 0.15), rgba(217, 119, 6, 0.06), transparent 60%);
+
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 12px 40px 0 rgba(0, 0, 0, 0.55);
+  --shadow-glow-indigo: 0 0 25px rgba(126, 34, 206, 0.2);
+
+  --border-radius-sm: 10px;
+  --border-radius-md: 18px;
+  --border-radius-lg: 28px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Typography Utility Classes */
+.font-handwriting {
+  font-family: var(--font-handwriting) !important;
+  font-size: 1.25rem !important;
+  letter-spacing: 0.03em;
+}
+
+.font-diary-serif {
+  font-family: var(--font-serif) !important;
+}
+
+/* Authentic Notebook Ruled Paper Aesthetic */
+.notebook-paper {
+  background: var(--grad-paper);
+  background-image: 
+    linear-gradient(rgba(168, 85, 247, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(217, 119, 6, 0.25) 1px, transparent 1px);
+  background-size: 100% 28px, 100% 100%;
+  background-position: 0 0, 48px 0;
+  border-left: 4px solid rgba(217, 119, 6, 0.5);
+  position: relative;
+}
+
+.notebook-paper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 44px;
+  bottom: 0;
+  width: 1px;
+  background: rgba(217, 119, 6, 0.35);
+  pointer-events: none;
+}
+
+/* Page Flip 3D Transitions */
+.page-flip-wrapper {
+  perspective: 1400px;
+}
+
+.page-flip-card {
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.page-flip-card.flipping {
+  transform: rotateY(-180deg);
+}
+
+@keyframes pageFlipIn {
+  0% {
+    opacity: 0;
+    transform: rotateY(-30deg) scale(0.95);
+    transform-origin: left center;
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+    transform-origin: left center;
+  }
+}
+
+.animate-page-flip {
+  animation: pageFlipIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Animated Background Mesh & Royal Orbs */
+.animated-bg-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.animated-bg-orbs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(217, 119, 6, 0.05) 1px, transparent 1px);
+  background-size: 36px 36px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.35;
+  animation: orbFloat 24s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 550px;
+  height: 550px;
+  background: rgba(126, 34, 206, 0.3); /* Imperial Purple */
+  top: -15%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 480px;
+  height: 480px;
+  background: rgba(217, 119, 6, 0.2); /* Aesthetic Amber Gold */
+  top: 35%;
+  right: -10%;
+  animation-delay: -6s;
+  animation-duration: 28s;
+}
+
+.orb-3 {
+  width: 420px;
+  height: 420px;
+  background: rgba(190, 18, 60, 0.22); /* Royal Crimson */
+  bottom: -10%;
+  left: 20%;
+  animation-delay: -12s;
+  animation-duration: 30s;
+}
+
+.orb-4 {
+  width: 380px;
+  height: 380px;
+  background: rgba(13, 148, 136, 0.18); /* Emerald Teal */
+  top: 15%;
+  left: 45%;
+  animation-delay: -18s;
+  animation-duration: 34s;
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(50px, -30px) scale(1.08); }
+  66% { transform: translate(-30px, 40px) scale(0.94); }
+  100% { transform: translate(30px, 20px) scale(1.04); }
+}
+
+/* Glassmorphism Styles with Royal Touches */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--grad-premium-glow);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glass-panel-hover:hover {
+  transform: translateY(-4px) scale(1.008);
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(126, 34, 206, 0.18);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(217, 119, 6, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
+
+/* App Container Layout & Full Responsiveness */
+.app-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+  .app-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+}
+
+.main-content {
+  padding: 3rem 2.5rem;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+  .main-content {
+    padding: 1.5rem;
+    min-height: calc(100vh - 60px);
+  }
+}
+
+@media (max-width: 600px) {
+  .main-content {
+    padding: 1rem;
+  }
+}
+
+/* Beautiful Inputs & Textareas */
+.form-group {
+  margin-bottom: 1.4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  margin-bottom: 0.55rem;
+}
+
+.form-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.85rem 1.1rem;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2), 0 0 20px rgba(168, 85, 247, 0.15);
+  background: rgba(14, 16, 30, 0.95);
+}
+
+/* Premium Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: var(--grad-primary);
+  color: white;
+  border: none;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(126, 34, 206, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.btn-exotic {
+  background: var(--grad-exotic);
+  box-shadow: 0 6px 20px rgba(126, 34, 206, 0.35);
+  width: 100%;
+}
+
+.btn-gold {
+  background: var(--grad-gold);
+  color: #090a12;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.35);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: all 0.6s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(126, 34, 206, 0.55), 0 0 15px rgba(217, 119, 6, 0.35);
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--border-hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #be123c 0%, #881337 100%);
+  box-shadow: 0 4px 15px rgba(190, 18, 60, 0.35);
+}
+
+.btn-danger:hover {
+  box-shadow: 0 8px 25px rgba(190, 18, 60, 0.5);
+}
+
+/* Profile Page Layout */
+.profile-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-hero-card {
+  padding: 2.2rem;
+  background: linear-gradient(135deg, rgba(38, 20, 68, 0.65) 0%, rgba(14, 16, 30, 0.75) 100%);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+}
+
+.profile-hero-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 640px) {
+  .profile-hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.avatar-large-glow {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--grad-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  font-family: var(--font-heading);
+  position: relative;
+  box-shadow: 0 0 35px rgba(126, 34, 206, 0.5);
+  flex-shrink: 0;
+}
+
+.avatar-sparkle {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: rgba(9, 10, 18, 0.9);
+  padding: 0.3rem;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 119, 6, 0.5);
+}
+
+.hero-title {
+  font-size: 1.85rem;
+  margin-bottom: 0.25rem;
+  background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 0.85rem;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+}
+
+.tag-active {
+  background: rgba(13, 148, 136, 0.15);
+  color: #2dd4bf;
+  border: 1px solid rgba(13, 148, 136, 0.3);
+}
+
+.tag-inactive {
+  background: rgba(190, 18, 60, 0.15);
+  color: #fb7185;
+  border: 1px solid rgba(190, 18, 60, 0.3);
+}
+
+.tag-secondary {
+  background: rgba(126, 34, 206, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(126, 34, 206, 0.3);
+}
+
+/* Side-by-Side Split Grid */
+.profile-grid-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+}
+
+@media (max-width: 850px) {
+  .profile-grid-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-card-left,
+.profile-card-right {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+.card-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-indigo {
+  background: rgba(126, 34, 206, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(126, 34, 206, 0.3);
+}
+
+.icon-coral {
+  background: rgba(217, 119, 6, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+.card-heading {
+  font-size: 1.15rem;
+  color: var(--text-primary);
+}
+
+.card-subheading {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* Toggle Switch Card Box */
+.toggle-card-box {
+  background: rgba(12, 14, 26, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  padding: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+  transition: all 0.25s ease;
+}
+
+.toggle-card-box:hover {
+  border-color: var(--border-hover);
+  background: rgba(18, 21, 38, 0.9);
+}
+
+.toggle-text-side {
+  display: flex;
+  flex-direction: column;
+}
+
+.toggle-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.toggle-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  line-height: 1.35;
+}
+
+.toggle-switch-container {
+  cursor: pointer;
+  padding: 4px;
+}
+
+.toggle-switch-track {
+  width: 52px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  position: relative;
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.toggle-switch-container.active .toggle-switch-track {
+  background: rgba(13, 148, 136, 0.3);
+  border-color: rgba(13, 148, 136, 0.6);
+}
+
+.toggle-switch-thumb {
+  width: 20px;
+  height: 20px;
+  background: #f8fafc;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.toggle-switch-thumb.on {
+  transform: translateX(24px);
+  background: #14b8a6;
+}
+
+.save-status {
+  text-align: center;
+  margin-top: 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2dd4bf;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+/* Mood-Specific Glowing Borders */
+.glow-ecstatic { border-top: 3px solid var(--color-ecstatic); }
+.glow-happy { border-top: 3px solid var(--color-happy); }
+.glow-neutral { border-top: 3px solid var(--color-neutral); }
+.glow-sad { border-top: 3px solid var(--color-sad); }
+.glow-stressed { border-top: 3px solid var(--color-stressed); }
+
+.glow-shadow-ecstatic:hover { box-shadow: 0 15px 30px rgba(13, 148, 136, 0.2), 0 0 15px rgba(13, 148, 136, 0.08); }
+.glow-shadow-happy:hover { box-shadow: 0 15px 30px rgba(16, 185, 129, 0.2), 0 0 15px rgba(16, 185, 129, 0.08); }
+.glow-shadow-neutral:hover { box-shadow: 0 15px 30px rgba(126, 34, 206, 0.2), 0 0 15px rgba(126, 34, 206, 0.08); }
+.glow-shadow-sad:hover { box-shadow: 0 15px 30px rgba(37, 99, 235, 0.2), 0 0 15px rgba(37, 99, 235, 0.08); }
+.glow-shadow-stressed:hover { box-shadow: 0 15px 30px rgba(190, 18, 60, 0.2), 0 0 15px rgba(190, 18, 60, 0.08); }
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animated-fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Mood Grid contributions heatmap details */
+.heatmap-cell {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.25);
+  z-index: 5;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================================ */
+/* VINTAGE & AGED PAPER AESTHETIC                                */
+/* ============================================================ */
+
+:root {
+  --vintage-parchment: #f4e4c1;
+  --vintage-paper-dark: #e8d5b0;
+  --vintage-ink: #3c2415;
+  --vintage-ink-light: #5a3a28;
+  --vintage-leather: #6b3a2a;
+  --vintage-leather-dark: #4a2518;
+  --vintage-gold: #c9a84c;
+  --vintage-gold-dark: #a07c30;
+  --vintage-sepia: #8b6914;
+  --vintage-red-seal: #8b2020;
+  --vintage-shadow: rgba(60, 36, 21, 0.3);
+  --font-vintage-serif: 'EB Garamond', 'Playfair Display', serif;
+  --font-vintage-script: 'Dancing Script', 'Caveat', cursive;
+}
+
+/* Vintage Parchment Paper Card */
+.vintage-paper {
+  background: linear-gradient(145deg, #f4e4c1 0%, #e8d5b0 30%, #dfc9a0 70%, #d4ba8a 100%);
+  border: none;
+  border-radius: 4px;
+  position: relative;
+  color: var(--vintage-ink);
+  box-shadow: 
+    2px 3px 12px rgba(60, 36, 21, 0.25),
+    inset 0 0 60px rgba(139, 105, 20, 0.08);
+  overflow: visible;
+}
+
+.vintage-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* Coffee stain decorative corner */
+.vintage-paper::after {
+  content: '';
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  bottom: -10px;
+  right: -10px;
+  background: radial-gradient(circle, rgba(139, 105, 20, 0.12) 0%, rgba(139, 105, 20, 0.04) 50%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ruled vintage paper lines */
+.vintage-ruled {
+  background-image:
+    linear-gradient(rgba(60, 36, 21, 0.08) 1px, transparent 1px);
+  background-size: 100% 28px;
+  background-position: 0 0;
+}
+
+/* Vintage margin line */
+.vintage-ruled::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 48px;
+  bottom: 0;
+  width: 1.5px;
+  background: rgba(139, 32, 32, 0.25);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Leather Bound Card */
+.vintage-leather-card {
+  background: linear-gradient(145deg, #f4e4c1 0%, #eddcb8 100%);
+  border: 3px solid var(--vintage-leather);
+  border-radius: 4px;
+  position: relative;
+  color: var(--vintage-ink);
+  box-shadow:
+    3px 4px 15px rgba(60, 36, 21, 0.3),
+    inset 0 0 40px rgba(139, 105, 20, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vintage-leather-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    4px 8px 25px rgba(60, 36, 21, 0.35),
+    inset 0 0 40px rgba(139, 105, 20, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Stitching border effect */
+.vintage-leather-card::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1.5px dashed rgba(107, 58, 42, 0.3);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Wax Seal Mood Badge */
+.wax-seal {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  position: relative;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.25),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  transition: transform 0.25s ease;
+}
+
+.wax-seal:hover {
+  transform: scale(1.1);
+}
+
+.wax-seal-ecstatic {
+  background: radial-gradient(circle at 35% 35%, #2dd4bf, #0d9488 60%, #064e3b);
+}
+.wax-seal-happy {
+  background: radial-gradient(circle at 35% 35%, #6ee7b7, #10b981 60%, #065f46);
+}
+.wax-seal-neutral {
+  background: radial-gradient(circle at 35% 35%, #c4b5fd, #7e22ce 60%, #3b0764);
+}
+.wax-seal-sad {
+  background: radial-gradient(circle at 35% 35%, #93c5fd, #2563eb 60%, #1e3a5f);
+}
+.wax-seal-stressed {
+  background: radial-gradient(circle at 35% 35%, #fca5a5, #be123c 60%, #4c0519);
+}
+
+/* Ink Title Style */
+.ink-title {
+  font-family: var(--font-vintage-serif);
+  color: var(--vintage-ink);
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.ink-title::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--vintage-ink) 0%, var(--vintage-sepia) 50%, transparent 100%);
+  opacity: 0.4;
+}
+
+/* Quill Toolbar */
+.quill-toolbar {
+  background: linear-gradient(135deg, #d4ba8a 0%, #c9a84c 50%, #d4ba8a 100%);
+  border: 1px solid rgba(107, 58, 42, 0.35);
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 2px 6px rgba(60, 36, 21, 0.15);
+}
+
+.quill-toolbar .toolbar-label {
+  font-family: var(--font-vintage-serif);
+  font-size: 0.82rem;
+  color: var(--vintage-ink-light);
+  font-weight: 600;
+  font-style: italic;
+}
+
+.quill-font-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--vintage-ink-light);
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
+}
+
+.quill-font-btn:hover {
+  background: rgba(107, 58, 42, 0.1);
+}
+
+.quill-font-btn.active {
+  background: var(--vintage-leather);
+  color: var(--vintage-parchment);
+  border-color: var(--vintage-leather-dark);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Vintage form inputs */
+.vintage-input {
+  width: 100%;
+  background: rgba(244, 228, 193, 0.6);
+  border: 1px solid rgba(107, 58, 42, 0.25);
+  color: var(--vintage-ink);
+  padding: 0.85rem 1.1rem;
+  border-radius: 4px;
+  font-family: var(--font-vintage-serif);
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+}
+
+.vintage-input:focus {
+  outline: none;
+  border-color: var(--vintage-leather);
+  box-shadow: 0 0 0 3px rgba(107, 58, 42, 0.12), inset 0 1px 4px rgba(60, 36, 21, 0.08);
+  background: rgba(244, 228, 193, 0.85);
+}
+
+.vintage-input::placeholder {
+  color: rgba(90, 58, 40, 0.45);
+  font-style: italic;
+}
+
+/* Vintage textarea on parchment */
+.vintage-textarea {
+  min-height: 220px;
+  resize: vertical;
+  line-height: 28px;
+  padding-left: 56px;
+  background: transparent;
+  border: none;
+  color: var(--vintage-ink);
+  font-size: 1rem;
+}
+
+.vintage-textarea:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.vintage-textarea::placeholder {
+  color: rgba(90, 58, 40, 0.4);
+  font-style: italic;
+}
+
+/* Vintage buttons */
+.btn-vintage {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, var(--vintage-leather) 0%, var(--vintage-leather-dark) 100%);
+  color: var(--vintage-parchment);
+  border: none;
+  padding: 0.85rem 1.75rem;
+  border-radius: 4px;
+  font-family: var(--font-vintage-serif);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(74, 37, 24, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.btn-vintage:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 37, 24, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, #7d4433 0%, var(--vintage-leather) 100%);
+}
+
+.btn-vintage:active {
+  transform: translateY(0);
+}
+
+.btn-vintage-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--vintage-leather);
+  border: 1.5px solid var(--vintage-leather);
+  padding: 0.7rem 1.25rem;
+  border-radius: 4px;
+  font-family: var(--font-vintage-serif);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-vintage-outline:hover {
+  background: rgba(107, 58, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Vintage Label */
+.vintage-label {
+  display: block;
+  font-family: var(--font-vintage-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--vintage-ink-light);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Vintage Mood Picker Buttons */
+.vintage-mood-btn {
+  background: rgba(244, 228, 193, 0.5);
+  border: 1.5px solid rgba(107, 58, 42, 0.2);
+  border-radius: 6px;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--vintage-ink-light);
+}
+
+.vintage-mood-btn:hover {
+  background: rgba(201, 168, 76, 0.15);
+  border-color: var(--vintage-gold);
+}
+
+.vintage-mood-btn.selected {
+  border-width: 2px;
+  transform: scale(1.05);
+  background: rgba(201, 168, 76, 0.12);
+}
+
+.vintage-mood-btn .mood-emoji {
+  font-size: 1.8rem;
+}
+
+.vintage-mood-btn .mood-text {
+  font-family: var(--font-vintage-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Vintage Modal Overlay */
+.vintage-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(60, 36, 21, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+
+/* Vintage Chip / Filter Button */
+.vintage-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1.5px solid rgba(107, 58, 42, 0.2);
+  padding: 0.45rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font-vintage-serif);
+  transition: all 0.2s ease;
+  background: rgba(244, 228, 193, 0.5);
+  color: var(--vintage-ink-light);
+  white-space: nowrap;
+}
+
+.vintage-chip:hover {
+  background: rgba(201, 168, 76, 0.15);
+  border-color: var(--vintage-gold);
+}
+
+.vintage-chip.active {
+  background: var(--vintage-leather);
+  color: var(--vintage-parchment);
+  border-color: var(--vintage-leather-dark);
+}
+
+/* Vintage Search Bar */
+.vintage-search-bar {
+  background: linear-gradient(135deg, #d4ba8a 0%, #c4a870 100%);
+  border: 2px solid rgba(107, 58, 42, 0.25);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 3px 10px rgba(60, 36, 21, 0.15);
+}
+
+/* Vintage Page Header */
+.vintage-page-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.vintage-page-header .header-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--vintage-leather);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(74, 37, 24, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+.vintage-page-title {
+  font-family: var(--font-vintage-serif);
+  font-size: 2rem;
+  color: var(--vintage-ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.vintage-page-subtitle {
+  font-family: var(--font-vintage-serif);
+  color: var(--vintage-ink-light);
+  font-size: 0.92rem;
+  font-style: italic;
+  margin-top: 0.2rem;
+  opacity: 0.75;
+}
+
+/* Vintage Date Badge */
+.vintage-date-badge {
+  font-family: var(--font-vintage-serif);
+  font-size: 0.78rem;
+  color: var(--vintage-ink-light);
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Vintage Card Title */
+.vintage-card-title {
+  font-family: var(--font-vintage-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--vintage-ink);
+  margin-bottom: 0.65rem;
+  line-height: 1.3;
+}
+
+/* Vintage Card Snippet */
+.vintage-card-snippet {
+  color: var(--vintage-ink-light);
+  font-family: var(--font-vintage-serif);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  flex-grow: 1;
+  margin-bottom: 1rem;
+}
+
+/* Vintage Icon Button */
+.vintage-icon-btn {
+  background: none;
+  border: none;
+  color: var(--vintage-ink-light);
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  opacity: 0.6;
+}
+
+.vintage-icon-btn:hover {
+  opacity: 1;
+  background: rgba(107, 58, 42, 0.08);
+}
+
+.vintage-icon-btn.danger {
+  color: var(--vintage-red-seal);
+}
+
+/* Vintage Divider */
+.vintage-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(60, 36, 21, 0.2), transparent);
+  margin: 1rem 0;
+}
+
+/* Vintage Page-Flip Animation (softer, paper-like) */
+@keyframes vintagePageFlip {
+  0% {
+    opacity: 0;
+    transform: rotateY(-15deg) scale(0.97);
+    transform-origin: left center;
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+    transform-origin: left center;
+  }
+}
+
+.vintage-flip-in {
+  animation: vintagePageFlip 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Vintage Pagination */
+.vintage-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.vintage-pagination .page-text {
+  font-family: var(--font-vintage-serif);
+  font-size: 0.88rem;
+  color: var(--vintage-ink-light);
+  font-style: italic;
+}
+
+/* Fix for Profile hero title visibility */
+.hero-title {
+  font-size: 1.85rem;
+  margin-bottom: 0.25rem;
+  background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Vintage font utilities */
+.font-vintage-serif {
+  font-family: var(--font-vintage-serif) !important;
+}
+
+.font-vintage-script {
+  font-family: var(--font-vintage-script) !important;
+  font-size: 1.3rem !important;
+}
+
+/* Dashboard Reminder Card */
+.reminder-card-vintage {
+  background: linear-gradient(145deg, #f4e4c1 0%, #e8d5b0 100%);
+  border: 2px solid var(--vintage-leather);
+  border-radius: 6px;
+  padding: 1.5rem;
+  color: var(--vintage-ink);
+  position: relative;
+  box-shadow: 2px 3px 12px rgba(60, 36, 21, 0.2);
+}
+
+.reminder-card-vintage .reminder-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-vintage-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--vintage-ink);
+}
+
+.reminder-card-vintage .reminder-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--vintage-leather);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(74, 37, 24, 0.25);
+}
+
+.reminder-time-input {
+  background: rgba(244, 228, 193, 0.7);
+  border: 1px solid rgba(107, 58, 42, 0.25);
+  color: var(--vintage-ink);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-family: var(--font-vintage-serif);
+  font-size: 0.9rem;
+}
+
+.reminder-time-input:focus {
+  outline: none;
+  border-color: var(--vintage-leather);
+  box-shadow: 0 0 0 2px rgba(107, 58, 42, 0.12);
+}

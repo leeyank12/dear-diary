@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment Variables & Secret Files (VERY IMPORTANT)
+.env
+*.env
+**/backend/.env
+**/frontend/.env
+
+# Build Output
+dist/
+**/dist/
+build/
+**/build/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Antigravity & AI System files
+.gemini/
+.antigravity/
+brain/
+scratch/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
