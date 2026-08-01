@@ -1,25 +1,11 @@
 import axios from 'axios';
 
-// Detect if we should use the backend server or demo mock mode (localStorage)
-const getAppMode = () => {
-  const mode = localStorage.getItem('dear_diary_mode');
-  if (!mode) {
-    // Default to 'demo' unless explicitly set, making it instantly runnable
-    localStorage.setItem('dear_diary_mode', 'demo');
-    return 'demo';
-  }
-  return mode;
-};
-
-export const setAppMode = (mode) => {
-  localStorage.setItem('dear_diary_mode', mode);
-  window.location.reload();
-};
-
-export const isDemoMode = () => getAppMode() === 'demo';
+// Export real backend server API layer directly
+export const isDemoMode = () => false;
+export const setAppMode = () => {};
 
 // ==========================================
-// 1. AXIOS REAL BACKEND LAYER
+// AXIOS REAL BACKEND LAYER
 // ==========================================
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -419,7 +405,5 @@ const mockApi = {
   },
 };
 
-// Export active api layer based on current state
-const api = isDemoMode() ? mockApi : serverApi;
-
+const api = serverApi;
 export default api;

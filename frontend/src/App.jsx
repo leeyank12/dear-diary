@@ -8,7 +8,7 @@ import Dashboard from './pages/Dashboard';
 import DiaryList from './pages/DiaryList';
 import NewEntry from './pages/NewEntry';
 import Profile from './pages/Profile';
-import api, { isDemoMode } from './api';
+import api from './api';
 
 const AuthContext = createContext(null);
 const ToastContext = createContext(null);
@@ -20,6 +20,7 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -38,26 +39,10 @@ export default function App() {
           console.error('Session expired or authentication failed.');
           localStorage.removeItem('dear_diary_token');
           localStorage.removeItem('dear_diary_user');
+          setUser(null);
         }
-      } else if (isDemoMode()) {
-        const storedUser = localStorage.getItem('dear_diary_user');
-        if (storedUser) {
-          try {
-            setUser(JSON.parse(storedUser));
-          } catch (e) {
-            console.error('Failed to parse local demo user');
-          }
-        } else {
-          const defaultDemoUser = {
-            id: 'mock_user_1',
-            name: 'Alex Morgan',
-            email: 'alex.morgan@example.com',
-            guardianPhone: '+1 (555) 019-2834',
-            alertsEnabled: true
-          };
-          localStorage.setItem('dear_diary_user', JSON.stringify(defaultDemoUser));
-          setUser(defaultDemoUser);
-        }
+      } else {
+        setUser(null);
       }
       setLoading(false);
     };
@@ -107,26 +92,26 @@ export default function App() {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        backgroundColor: '#05060e',
+        backgroundColor: '#090a12',
         color: '#f8fafc',
-        fontFamily: 'Outfit, sans-serif'
+        fontFamily: "'EB Garamond', serif"
       }}>
         <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '0.05em' }}>
-          Loading Dear Diary...
+          Opening Dear Diary...
         </div>
       </div>
     );
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, register, logout, demoMode: isDemoMode() }}>
+    <AuthContext.Provider value={{ user, setUser, login, register, logout }}>
       <ToastContext.Provider value={{ showToast }}>
         <AnimatedBackground>
           <BrowserRouter>
             {toast && <Toast message={toast.message} type={toast.type} onClose={clearToast} />}
             
             <Routes>
-              {/* Public route */}
+              {/* Public auth route */}
               <Route 
                 path="/auth" 
                 element={user ? <Navigate to="/dashboard" replace /> : <Auth />} 
@@ -137,8 +122,8 @@ export default function App() {
                 path="/*"
                 element={
                   user ? (
-                    <div className="app-container">
-                      <Sidebar />
+                    <div className={`app-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+                      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
                       <main className="main-content">
                         <Routes>
                           <Route path="/dashboard" element={<Dashboard />} />

@@ -264,13 +264,50 @@ h1, h2, h3, h4, h5, h6 {
   display: grid;
   grid-template-columns: 280px 1fr;
   min-height: 100vh;
+  transition: grid-template-columns 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (max-width: 900px) {
-  .app-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-  }
+.app-container.sidebar-closed {
+  grid-template-columns: 0px 1fr;
+}
+
+.sidebar-container.closed {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-container.collapsed {
+  width: 72px !important;
+}
+
+.app-container:has(.sidebar-container.collapsed) {
+  grid-template-columns: 72px 1fr;
+}
+
+/* Floating Sidebar Toggle Button (Move In & Out) */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 100;
+  background: var(--vintage-leather);
+  color: var(--vintage-parchment);
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  transform: scale(1.08);
+  background: var(--vintage-leather-dark);
 }
 
 .main-content {
@@ -279,14 +316,28 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   margin: 0 auto;
   min-height: 100vh;
+  transition: padding 0.3s ease;
 }
 
 @media (max-width: 900px) {
+  .app-container {
+    display: block;
+  }
+
+  .sidebar-container {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px !important;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.7);
+  }
+
   .main-content {
-    padding: 1.5rem;
-    min-height: calc(100vh - 60px);
+    padding: 4.5rem 1.25rem 2rem 1.25rem;
   }
 }
+
 
 @media (max-width: 600px) {
   .main-content {
