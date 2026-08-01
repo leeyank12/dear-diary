@@ -1367,3 +1367,51 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--vintage-leather);
   box-shadow: 0 0 0 2px rgba(107, 58, 42, 0.12);
 }
+
+/* Responsive Mood Plates Grid */
+.vintage-mood-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 680px) {
+  .vintage-mood-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 440px) {
+  .vintage-mood-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+}
+
+/* Mobile Responsive Polish */
+@media (max-width: 600px) {
+  .wax-seal {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.15rem !important;
+  }
+  
+  .vintage-paper {
+    padding: 1.5rem 1rem !important;
+  }
+
+  .vintage-leather-card {
+    padding: 1.1rem !important;
+  }
+
+  .vintage-page-title {
+    font-size: 1.5rem !important;
+  }
+
+  .vintage-search-bar {
+    padding: 0.85rem 1rem !important;
+  }
+}
+

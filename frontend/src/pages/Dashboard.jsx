@@ -572,7 +572,7 @@ const styles = {
   },
   chartsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
     gap: '1.5rem',
   },
   chartCard: {
@@ -606,6 +606,8 @@ const styles = {
     gap: '0.5rem',
     maxWidth: '500px',
     margin: '0 auto 1.5rem auto',
+    overflowX: 'auto',
+    paddingBottom: '0.25rem',
   },
   heatmapLegend: {
     display: 'flex',

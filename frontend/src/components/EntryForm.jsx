@@ -115,7 +115,7 @@ export default function EntryForm({ initialData = {}, onSubmit, submitLabel = 'S
       {/* 3. Wax Seal Mood Picker */}
       <div style={styles.formGroup}>
         <label className="vintage-label">How are you feeling?</label>
-        <div style={styles.moodGrid}>
+        <div className="vintage-mood-grid">
           {MOODS.map((item) => {
             const isSelected = mood === item.value;
             return (
