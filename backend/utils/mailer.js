@@ -53,6 +53,35 @@ async function getTransporter() {
  */
 async function sendEmail({ to, subject, html, text }) {
   try {
+    // 1. HTTPS API Layer (Bypasses Render firewall blocks over standard Port 443)
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const response = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: process.env.EMAIL_FROM || 'Dear Diary <onboarding@resend.dev>',
+            to: Array.isArray(to) ? to : [to],
+            subject,
+            html,
+          }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log(`[RESEND HTTPS API] Email sent to ${to}. Message ID: ${data.id}`);
+          return { success: true, messageId: data.id };
+        } else {
+          console.error('[RESEND API ERROR]', data);
+        }
+      } catch (err) {
+        console.error('[RESEND FETCH ERROR]', err.message);
+      }
+    }
+
+    // 2. Nodemailer Transporter (SMTP)
     const transporter = await getTransporter();
     if (!transporter) {
       console.log(`[MAILER FALLBACK LOG] To: ${to} | Subject: ${subject}`);
