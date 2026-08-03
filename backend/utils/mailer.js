@@ -75,6 +75,9 @@ async function sendEmail({ to, subject, html, text }) {
           return { success: true, messageId: data.id };
         } else {
           console.error('[RESEND API ERROR]', data);
+          if (data && data.message && data.message.includes('can only send testing emails')) {
+            console.log('[RESEND TIP] On Resend free tier, set ADMIN_EMAIL on Render to your Resend account email!');
+          }
         }
       } catch (err) {
         console.error('[RESEND FETCH ERROR]', err.message);
