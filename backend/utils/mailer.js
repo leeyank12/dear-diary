@@ -56,7 +56,7 @@ async function sendEmail({ to, subject, html, text }) {
       return { success: true, simulated: true };
     }
 
-    const fromAddress = process.env.EMAIL_FROM || '"Dear Diary" <no-reply@deardiary.app>';
+    const fromAddress = process.env.EMAIL_FROM || '"Dear Diary" <itsdiary000@gmail.com>';
 
     const info = await transporter.sendMail({
       from: fromAddress,

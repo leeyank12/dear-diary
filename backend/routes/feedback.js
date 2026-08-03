@@ -30,8 +30,8 @@ router.post('/', async (req, res) => {
         const user = await User.findById(decoded.id).select('-password');
         if (user) {
           userId = user._id;
-          userName = user.name || userName;
-          userEmail = user.email || userEmail;
+          userName = user.name || bodyName || userName;
+          userEmail = user.email || bodyEmail || userEmail;
         }
       } catch (e) {
         // Token optional or invalid; proceed with body email
