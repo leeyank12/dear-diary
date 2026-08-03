@@ -78,18 +78,21 @@ router.post('/', async (req, res) => {
       actionUrl: process.env.CLIENT_URL || 'http://localhost:5173',
     });
 
-    // Dispatch SMTP email to admin inbox
-    const mailResult = await sendEmail({
-      to: adminEmail,
-      subject: `[Dear Diary Feedback] ${categoryText} from ${userName}`,
-      html: htmlContent,
-    });
-
-    console.log(`[FEEDBACK] New feedback stored ID: ${newFeedback._id} | SMTP email status: ${mailResult.success ? 'SENT' : 'FAILED'}`);
-
+    // 2. Respond immediately to user UI (Non-blocking response)
     res.status(201).json({
       message: 'Thank you! Your feedback has been sent directly to our team via email.',
       feedback: newFeedback,
+    });
+
+    // 3. Dispatch SMTP email to admin inbox in background
+    sendEmail({
+      to: adminEmail,
+      subject: `[Dear Diary Feedback] ${categoryText} from ${userName}`,
+      html: htmlContent,
+    }).then(mailResult => {
+      console.log(`[FEEDBACK] Email dispatch to ${adminEmail}: ${mailResult.success ? 'SUCCESS' : 'FAILED'}`);
+    }).catch(err => {
+      console.error('[FEEDBACK EMAIL ERROR]', err);
     });
   } catch (err) {
     console.error('[FEEDBACK ROUTE ERROR]', err);
