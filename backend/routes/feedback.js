@@ -47,8 +47,8 @@ router.post('/', async (req, res) => {
       message,
     });
 
-    // 2. Send email via SMTP / Resend to app admin (ADMIN_EMAIL / SMTP_USER / fallback)
-    const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'itsdiary000@gmail.com';
+    // 2. Send email via Resend / SMTP to app admin (SMTP_USER / fallback)
+    const adminEmail = process.env.SMTP_USER || 'itsdiary000@gmail.com';
     
     const categoryLabels = {
       general: '💬 General Feedback',
