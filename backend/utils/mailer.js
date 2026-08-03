@@ -81,6 +81,35 @@ async function sendEmail({ to, subject, html, text }) {
       }
     }
 
+    // 1b. Brevo (Sendinblue) HTTPS API (Bypasses Render firewall over Port 443)
+    if (process.env.BREVO_API_KEY) {
+      try {
+        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'api-key': process.env.BREVO_API_KEY,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            sender: { name: 'Dear Diary', email: process.env.SMTP_USER || 'itsdiary000@gmail.com' },
+            to: [{ email: Array.isArray(to) ? to[0] : to }],
+            subject,
+            htmlContent: html,
+          }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log(`[BREVO HTTPS API] Email sent to ${to}. Message ID: ${data.messageId}`);
+          return { success: true, messageId: data.messageId };
+        } else {
+          console.error('[BREVO API ERROR]', data);
+        }
+      } catch (err) {
+        console.error('[BREVO FETCH ERROR]', err.message);
+      }
+    }
+
     // 2. Nodemailer Transporter (SMTP)
     const transporter = await getTransporter();
     if (!transporter) {
