@@ -29,6 +29,7 @@ app.use('/api/diary', require('./routes/diary'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/reminders', require('./routes/reminders'));
+app.use('/api/feedback', require('./routes/feedback'));
 
 const PORT = process.env.PORT || 10000;
 

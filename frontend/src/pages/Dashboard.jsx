@@ -3,7 +3,7 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend,
   LineChart, Line, XAxis, YAxis, CartesianGrid, AreaChart, Area
 } from 'recharts';
-import { BookOpen, Smile, Calendar, Heart, ShieldAlert, TrendingUp, Activity, Bell, Send, Clock, Plus, Trash2, Mail } from 'lucide-react';
+import { BookOpen, Smile, Calendar, Heart, ShieldAlert, TrendingUp, Activity, Bell, Send, Clock, Plus, Trash2, Mail, MessageSquare } from 'lucide-react';
 import api from '../api';
 import { useAuth, useToast } from '../App';
 
@@ -25,6 +25,35 @@ export default function Dashboard() {
   const [reminders, setReminders] = useState([]);
   const [newReminder, setNewReminder] = useState({ title: '', date: '', time: '09:00', type: 'event', recurring: false });
   const [addingReminder, setAddingReminder] = useState(false);
+
+  // Feedback State
+  const [feedbackCategory, setFeedbackCategory] = useState('general');
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [submittingFeedback, setSubmittingFeedback] = useState(false);
+
+  const handleSendFeedback = async (e) => {
+    e.preventDefault();
+    if (!feedbackMessage.trim()) {
+      showToast('Please type a feedback message.', 'error');
+      return;
+    }
+    setSubmittingFeedback(true);
+    try {
+      const res = await api.feedback.send({
+        category: feedbackCategory,
+        message: feedbackMessage,
+        userEmail: user?.email,
+        userName: user?.name,
+      });
+      showToast(res.message || 'Feedback sent to admin team via email!', 'success');
+      setFeedbackMessage('');
+    } catch (err) {
+      console.error(err);
+      showToast('Failed to send feedback.', 'error');
+    } finally {
+      setSubmittingFeedback(false);
+    }
+  };
 
   // Fetch reminders
   useEffect(() => {
@@ -398,8 +427,10 @@ export default function Dashboard() {
       </section>
 
       {/* ============================================================== */}
-      <section style={{ marginTop: '0.5rem' }}>
-        {/* Event Reminders (Birthdays, Anniversaries, Events) */}
+      {/* EVENT REMINDERS & USER FEEDBACK SECTION (Vintage Style)         */}
+      {/* ============================================================== */}
+      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem', marginTop: '0.5rem' }}>
+        {/* Left Column: Event Reminders (Birthdays, Anniversaries, Events) */}
         <div className="reminder-card-vintage">
           <div className="reminder-header">
             <div className="reminder-icon">
@@ -494,6 +525,60 @@ export default function Dashboard() {
                 </div>
               ))
             )}
+          </div>
+        </div>
+
+        {/* Right Column: User Feedback & Suggestions Card */}
+        <div className="reminder-card-vintage" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div>
+            <div className="reminder-header">
+              <div className="reminder-icon" style={{ background: '#7e22ce' }}>
+                <MessageSquare size={18} color="#ffffff" />
+              </div>
+              <span>Feedback & Suggestions</span>
+            </div>
+            <p style={{ fontSize: '0.85rem', color: '#5a3a28', marginBottom: '1rem', fontFamily: "'EB Garamond', serif", fontStyle: 'italic' }}>
+              Have feedback, feature requests, or bug reports? Type your message below and it will be emailed directly to our team via SMTP.
+            </p>
+
+            <form onSubmit={handleSendFeedback} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div>
+                <label className="vintage-label" style={{ fontSize: '0.78rem', marginBottom: '0.25rem' }}>Category</label>
+                <select
+                  className="vintage-input"
+                  style={{ padding: '0.45rem 0.65rem', fontSize: '0.85rem', width: '100%' }}
+                  value={feedbackCategory}
+                  onChange={(e) => setFeedbackCategory(e.target.value)}
+                >
+                  <option value="general">💬 General Feedback</option>
+                  <option value="bug">🐛 Bug Report</option>
+                  <option value="feature">✨ Feature Suggestion</option>
+                  <option value="appreciation">❤️ Appreciation / Praise</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="vintage-label" style={{ fontSize: '0.78rem', marginBottom: '0.25rem' }}>Your Message</label>
+                <textarea
+                  className="vintage-input"
+                  style={{ minHeight: '85px', resize: 'vertical', fontSize: '0.88rem', padding: '0.5rem 0.75rem', fontFamily: "'EB Garamond', serif" }}
+                  placeholder="Share your thoughts or ideas with us..."
+                  value={feedbackMessage}
+                  onChange={(e) => setFeedbackMessage(e.target.value)}
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={submittingFeedback}
+                className="btn-vintage"
+                style={{ padding: '0.6rem 1.25rem', fontSize: '0.85rem', alignSelf: 'flex-start' }}
+              >
+                <Send size={15} />
+                <span>{submittingFeedback ? 'Sending Email...' : 'Submit Feedback'}</span>
+              </button>
+            </form>
           </div>
         </div>
       </section>

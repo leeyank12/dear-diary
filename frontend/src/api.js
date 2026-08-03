@@ -119,6 +119,12 @@ const serverApi = {
       return res.data;
     },
   },
+  feedback: {
+    send: async (data) => {
+      const res = await axiosInstance.post('/feedback', data);
+      return res.data;
+    },
+  },
 };
 
 // ==========================================
