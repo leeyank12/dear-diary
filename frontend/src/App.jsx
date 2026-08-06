@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import DiaryList from './pages/DiaryList';
 import NewEntry from './pages/NewEntry';
 import Profile from './pages/Profile';
+import Admin from './pages/Admin';
 import api from './api';
 
 const AuthContext = createContext(null);
@@ -35,6 +36,7 @@ function ProtectedContent({ user, sidebarOpen, setSidebarOpen }) {
           <Route path="/entries" element={<DiaryList />} />
           <Route path="/new-entry" element={<NewEntry />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>

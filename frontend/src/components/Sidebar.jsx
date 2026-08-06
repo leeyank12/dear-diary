@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, PlusCircle, LogOut, User, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, BookOpen, PlusCircle, LogOut, User, Menu, X, ChevronLeft, ChevronRight, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../App';
 
 export default function Sidebar({ isOpen = true, onToggle }) {
@@ -72,6 +72,14 @@ export default function Sidebar({ isOpen = true, onToggle }) {
           >
             <User size={20} />
             {!collapsed && <span>Profile & Settings</span>}
+          </NavLink>
+          <NavLink 
+            to="/admin" 
+            style={({isActive}) => ({...styles.navLink, ...(isActive ? styles.navLinkActive : {})})}
+            title="Admin Panel"
+          >
+            <ShieldAlert size={20} />
+            {!collapsed && <span>Admin Panel</span>}
           </NavLink>
         </nav>
 

@@ -125,6 +125,16 @@ const serverApi = {
       return res.data;
     },
   },
+  admin: {
+    getOverview: async () => {
+      const res = await axiosInstance.get('/admin/overview');
+      return res.data;
+    },
+    deleteUser: async (id) => {
+      const res = await axiosInstance.delete(`/admin/users/${id}`);
+      return res.data;
+    },
+  },
 };
 
 // ==========================================
