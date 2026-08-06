@@ -42,8 +42,16 @@ function ProtectedContent({ user, sidebarOpen, setSidebarOpen }) {
 }
 
 export default function App() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('dear_diary_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+  const [loading, setLoading] = useState(() => !localStorage.getItem('dear_diary_user') && !!localStorage.getItem('dear_diary_token'));
+  const [slowServerWarning, setSlowServerWarning] = useState(false);
   const [toast, setToast] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -54,12 +62,17 @@ export default function App() {
   const clearToast = () => setToast(null);
 
   useEffect(() => {
+    let warnTimer = setTimeout(() => {
+      if (loading) setSlowServerWarning(true);
+    }, 3000);
+
     const fetchUser = async () => {
       const token = localStorage.getItem('dear_diary_token');
       if (token) {
         try {
           const userData = await api.auth.getMe();
           setUser(userData);
+          localStorage.setItem('dear_diary_user', JSON.stringify(userData));
         } catch (err) {
           console.error('Session expired or authentication failed.');
           localStorage.removeItem('dear_diary_token');
@@ -70,9 +83,11 @@ export default function App() {
         setUser(null);
       }
       setLoading(false);
+      clearTimeout(warnTimer);
     };
 
     fetchUser();
+    return () => clearTimeout(warnTimer);
   }, []);
 
   const login = async (credentials) => {
@@ -110,20 +125,29 @@ export default function App() {
     showToast('Logged out successfully.');
   };
 
-  if (loading) {
+  if (loading && !user) {
     return (
       <div style={{
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
         backgroundColor: '#090a12',
-        color: '#f8fafc',
-        fontFamily: "'EB Garamond', serif"
+        color: '#f4e4c1',
+        fontFamily: "'EB Garamond', serif",
+        padding: '1.5rem',
+        textAlign: 'center'
       }}>
-        <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '0.05em' }}>
+        <div style={{ fontSize: '3rem', marginBottom: '1rem', animation: 'pulse 2s infinite' }}>📔</div>
+        <div style={{ fontSize: '1.6rem', fontWeight: 700, letterSpacing: '0.04em', color: '#f4e4c1' }}>
           Opening Dear Diary...
         </div>
+        {slowServerWarning && (
+          <p style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#c9a84c', fontStyle: 'italic', maxWidth: '320px' }}>
+            ⚡ Waking up backend server on Render... This takes just a moment on cold starts!
+          </p>
+        )}
       </div>
     );
   }
