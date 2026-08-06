@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema(
     guardianEmail: { type: String, default: '' },
     birthday: { type: Date },
     alertsEnabled: { type: Boolean, default: false },
+    reminderEnabled: { type: Boolean, default: true },
+    reminderTime: { type: String, default: '20:30' },
+    reminderFreq: { type: String, default: 'daily' },
+    lastDailyReminderSent: { type: Date },
   },
   {
     timestamps: true,

@@ -22,7 +22,7 @@ router.put('/me', protect, async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const { name, profilePicture, guardianPhone, guardianEmail, birthday, email, alertsEnabled } = req.body;
+    const { name, profilePicture, guardianPhone, guardianEmail, birthday, email, alertsEnabled, reminderEnabled, reminderTime, reminderFreq } = req.body;
 
     if (name !== undefined) user.name = name;
     if (profilePicture !== undefined) user.profilePicture = profilePicture;
@@ -31,6 +31,9 @@ router.put('/me', protect, async (req, res) => {
     if (birthday !== undefined) user.birthday = birthday;
     if (email !== undefined) user.email = email;
     if (alertsEnabled !== undefined) user.alertsEnabled = alertsEnabled;
+    if (reminderEnabled !== undefined) user.reminderEnabled = reminderEnabled;
+    if (reminderTime !== undefined) user.reminderTime = reminderTime;
+    if (reminderFreq !== undefined) user.reminderFreq = reminderFreq;
 
     await user.save();
     const updated = await User.findById(req.user.id).select('-password');
