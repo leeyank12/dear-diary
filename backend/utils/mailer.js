@@ -73,11 +73,30 @@ async function sendEmail({ to, subject, html, text }) {
         if (response.ok) {
           console.log(`[RESEND HTTPS API] Email sent to ${to}. Message ID: ${data.id}`);
           return { success: true, messageId: data.id };
+        } else if (data && data.message && data.message.includes('can only send testing emails')) {
+          const ownerEmail = process.env.SMTP_USER || 'itsdiary000@gmail.com';
+          console.log(`[RESEND RECIPIENT FALLBACK] Resend testing mode: Redirecting email intended for ${to} to owner inbox (${ownerEmail})...`);
+          
+          const fallbackRes = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              from: 'Dear Diary <onboarding@resend.dev>',
+              to: [ownerEmail],
+              subject: `[For: ${to}] ${subject}`,
+              html: `<div style="background:#fef3c7; border:1px solid #f59e0b; padding:10px; margin-bottom:15px; border-radius:6px; color:#92400e; font-size:13px;"><strong>Resend Testing Mode Notice:</strong> Intended for recipient: <code>${to}</code></div>` + html,
+            }),
+          });
+          const fallbackData = await fallbackRes.json();
+          if (fallbackRes.ok) {
+            console.log(`[RESEND FALLBACK SUCCESS] Email for ${to} delivered to ${ownerEmail}. ID: ${fallbackData.id}`);
+            return { success: true, messageId: fallbackData.id };
+          }
         } else {
           console.error('[RESEND API ERROR]', data);
-          if (data && data.message && data.message.includes('can only send testing emails')) {
-            console.log('[RESEND TIP] On Resend free tier, set ADMIN_EMAIL on Render to your Resend account email!');
-          }
         }
       } catch (err) {
         console.error('[RESEND FETCH ERROR]', err.message);
