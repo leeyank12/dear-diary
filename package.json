@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "Root package runner for Dear Diary MERN stack project",
   "scripts": {
+    "postinstall": "npm install --prefix backend",
+    "start": "node backend/server.js",
     "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
     "backend": "npm run dev --prefix backend",
     "frontend": "npm run dev --prefix frontend",
@@ -13,6 +15,13 @@
     "concurrently": "^8.2.2"
   },
   "dependencies": {
-    "all": "^0.0.0"
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.1",
+    "node-cron": "^4.6.0",
+    "nodemailer": "^6.9.13"
   }
 }
