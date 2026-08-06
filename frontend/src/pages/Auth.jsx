@@ -27,8 +27,9 @@ export default function Auth() {
     
     setIsSubmitting(false);
     if (success) {
-      // After successful auth, navigate to the dashboard
-      navigate('/dashboard');
+      const target = sessionStorage.getItem('redirect_after_auth') || '/dashboard';
+      sessionStorage.removeItem('redirect_after_auth');
+      navigate(target);
     }
   };
 

@@ -5,6 +5,14 @@ const Diary = require('../models/Diary');
 const { sendEmail, createEmailTemplate } = require('./mailer');
 
 /**
+ * Helper to get client URL for email action buttons
+ */
+function getClientUrl(path = '/new-entry') {
+  const base = (process.env.CLIENT_URL || 'https://dear-diary-two-alpha.vercel.app').replace(/\/$/, '');
+  return `${base}${path}`;
+}
+
+/**
  * Helper to get normalized HH string from time format (e.g. "20:30" -> 20, "9:00" -> 9, "09:00" -> 9)
  */
 function parseHour(timeStr) {
@@ -82,8 +90,8 @@ async function processDailyJournalReminders() {
           </div>
           <p>Write today's entry while the memories are fresh!</p>
         `,
-        actionText: 'Open Dear Diary',
-        actionUrl: process.env.CLIENT_URL || 'http://localhost:5173',
+        actionText: 'Write Today\'s Entry',
+        actionUrl: getClientUrl('/new-entry'),
       });
 
       const result = await sendEmail({
@@ -160,8 +168,8 @@ async function processEventReminders() {
           </p>
           <p>Don't forget to mark this special moment in your journal!</p>
         `,
-        actionText: 'Open Dear Diary',
-        actionUrl: process.env.CLIENT_URL || 'http://localhost:5173',
+        actionText: 'View Dashboard',
+        actionUrl: getClientUrl('/dashboard'),
       });
 
       const result = await sendEmail({
@@ -254,7 +262,7 @@ async function processInactiveUserReminders() {
             <p>How have you been feeling lately? Tap below to jump straight to your journal.</p>
           `,
           actionText: 'Write Today\'s Entry',
-          actionUrl: process.env.CLIENT_URL || 'http://localhost:5173',
+          actionUrl: getClientUrl('/new-entry'),
         });
 
         const result = await sendEmail({

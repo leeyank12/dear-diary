@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Toast from './components/Toast';
 import AnimatedBackground from './components/AnimatedBackground';
@@ -15,6 +14,32 @@ const ToastContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 export const useToast = () => useContext(ToastContext);
+
+function ProtectedContent({ user, sidebarOpen, setSidebarOpen }) {
+  const location = useLocation();
+
+  if (!user) {
+    if (location.pathname && location.pathname !== '/auth') {
+      sessionStorage.setItem('redirect_after_auth', location.pathname);
+    }
+    return <Navigate to="/auth" replace />;
+  }
+
+  return (
+    <div className={`app-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <main className="main-content">
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/entries" element={<DiaryList />} />
+          <Route path="/new-entry" element={<NewEntry />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -120,25 +145,7 @@ export default function App() {
               {/* Protected routes wrapped in Sidebar */}
               <Route
                 path="/*"
-                element={
-                  user ? (
-                    <div className={`app-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-                      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
-                      <main className="main-content">
-                        <Routes>
-                          <Route path="/dashboard" element={<Dashboard />} />
-                          <Route path="/entries" element={<DiaryList />} />
-                          <Route path="/new-entry" element={<NewEntry />} />
-                          <Route path="/profile" element={<Profile />} />
-                          {/* Fallback routing */}
-                          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-                        </Routes>
-                      </main>
-                    </div>
-                  ) : (
-                    <Navigate to="/auth" replace />
-                  )
-                }
+                element={<ProtectedContent user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />}
               />
             </Routes>
           </BrowserRouter>
