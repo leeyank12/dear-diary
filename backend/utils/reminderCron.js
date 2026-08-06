@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const Reminder = require('../models/Reminder');
 const User = require('../models/User');
+const Diary = require('../models/Diary');
 const { sendEmail, createEmailTemplate } = require('./mailer');
 
 /**
@@ -192,11 +193,97 @@ async function processEventReminders() {
 }
 
 /**
- * Combined process function for all reminders
+ * 3. Process Inactive User Detection (3+ Days Without Journal Entry)
+ * Checks for users who haven't logged a diary entry in 3 or more days and sends a "We miss you!" email.
+ */
+async function processInactiveUserReminders() {
+  try {
+    const now = new Date();
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const users = await User.find({
+      $or: [
+        { reminderEnabled: true },
+        { reminderEnabled: { $exists: false } }
+      ]
+    });
+
+    if (!users || users.length === 0) return;
+
+    for (const user of users) {
+      if (!user.email) continue;
+
+      // Avoid spamming: do not send more than one inactivity email per 7 days
+      if (user.lastInactivityEmailSent) {
+        const lastSent = new Date(user.lastInactivityEmailSent);
+        if (lastSent > sevenDaysAgo) continue;
+      }
+
+      // Check user's most recent diary entry
+      const latestEntry = await Diary.findOne({ user: user._id }).sort({ date: -1 });
+
+      let daysInactive = 3;
+      if (latestEntry && latestEntry.date) {
+        const diffMs = now.getTime() - new Date(latestEntry.date).getTime();
+        daysInactive = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      } else if (user.createdAt) {
+        const diffMs = now.getTime() - new Date(user.createdAt).getTime();
+        daysInactive = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      }
+
+      // If user has been inactive for 3 or more days
+      if (daysInactive >= 3) {
+        console.log(`[INACTIVITY CRON] User ${user.email} inactive for ${daysInactive} days. Sending 'We Miss You' re-engagement email.`);
+
+        const htmlContent = createEmailTemplate({
+          title: `✨ We Miss You, ${user.name || 'Friend'}!`,
+          greeting: user.name || 'Friend',
+          badgeText: 'JOURNAL RE-ENGAGEMENT',
+          bodyContent: `
+            <p>It's been <strong>${daysInactive} days</strong> since your last entry in <strong>Dear Diary</strong>.</p>
+            <p>Life gets busy, but taking just 2 minutes to record your thoughts, emotions, and daily highlights brings clarity and peace of mind.</p>
+            <div style="background: rgba(126, 34, 206, 0.15); border-left: 3px solid #d97706; padding: 14px 18px; border-radius: 6px; margin: 16px 0;">
+              <p style="margin: 0; font-size: 15px; color: #fef3c7; font-style: italic;">
+                "Your journal is a safe, quiet space ready to listen whenever you need a moment of reflection."
+              </p>
+            </div>
+            <p>How have you been feeling lately? Tap below to jump straight to your journal.</p>
+          `,
+          actionText: 'Write Today\'s Entry',
+          actionUrl: process.env.CLIENT_URL || 'http://localhost:5173',
+        });
+
+        const result = await sendEmail({
+          to: user.email,
+          subject: `✨ We miss you! Your diary is waiting for your story...`,
+          html: htmlContent,
+        });
+
+        if (result.success) {
+          user.lastInactivityEmailSent = new Date();
+          await user.save();
+          console.log(`[INACTIVITY EMAIL SENT] Re-engagement prompt delivered to ${user.email}`);
+        } else {
+          console.error(`[INACTIVITY EMAIL FAILED] Delivery to ${user.email}:`, result.error);
+        }
+      }
+    }
+  } catch (err) {
+    console.error('[INACTIVITY CRON ERROR]', err);
+  }
+}
+
+/**
+ * Combined process function for all reminders & inactivity checks
  */
 async function processReminders() {
   await processDailyJournalReminders();
   await processEventReminders();
+  await processInactiveUserReminders();
 }
 
 /**
@@ -210,7 +297,7 @@ function startReminderCron() {
     processReminders();
   });
 
-  console.log('[REMINDER CRON] Scheduled — checks every hour for daily writing prompts and event reminders.');
+  console.log('[REMINDER CRON] Scheduled — checks every hour for daily writing prompts, event reminders, and inactive users.');
 
   // Run initial check on startup after 5s
   setTimeout(() => {
@@ -219,4 +306,10 @@ function startReminderCron() {
   }, 5000);
 }
 
-module.exports = { startReminderCron, processReminders, processDailyJournalReminders, processEventReminders };
+module.exports = { 
+  startReminderCron, 
+  processReminders, 
+  processDailyJournalReminders, 
+  processEventReminders,
+  processInactiveUserReminders
+};

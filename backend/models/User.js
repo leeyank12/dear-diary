@@ -34,6 +34,7 @@ const UserSchema = new mongoose.Schema(
     reminderTime: { type: String, default: '20:30' },
     reminderFreq: { type: String, default: 'daily' },
     lastDailyReminderSent: { type: Date },
+    lastInactivityEmailSent: { type: Date },
   },
   {
     timestamps: true,
