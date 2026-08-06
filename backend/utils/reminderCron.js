@@ -57,6 +57,22 @@ async function processDailyJournalReminders() {
         }
       }
 
+      // Check user inactivity: if user has been inactive for > 5 days, stop sending emails
+      const latestEntry = await Diary.findOne({ user: user._id }).sort({ date: -1 });
+      let daysInactive = 0;
+      if (latestEntry && latestEntry.date) {
+        const diffMs = now.getTime() - new Date(latestEntry.date).getTime();
+        daysInactive = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      } else if (user.createdAt) {
+        const diffMs = now.getTime() - new Date(user.createdAt).getTime();
+        daysInactive = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      }
+
+      if (daysInactive > 5) {
+        console.log(`[DAILY DIARY CRON] Skipping ${user.email}: User inactive for ${daysInactive} days (> 5 days limit).`);
+        continue;
+      }
+
       // Check scheduled hour
       const scheduledHour = parseHour(user.reminderTime || '20:30');
       if (scheduledHour !== currentHour) {
@@ -243,8 +259,8 @@ async function processInactiveUserReminders() {
         daysInactive = Math.floor(diffMs / (1000 * 60 * 60 * 24));
       }
 
-      // If user has been inactive for 3 or more days
-      if (daysInactive >= 3) {
+      // If user has been inactive for between 3 and 5 days, send re-engagement email
+      if (daysInactive >= 3 && daysInactive <= 5) {
         console.log(`[INACTIVITY CRON] User ${user.email} inactive for ${daysInactive} days. Sending 'We Miss You' re-engagement email.`);
 
         const htmlContent = createEmailTemplate({
