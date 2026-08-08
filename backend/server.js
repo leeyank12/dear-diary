@@ -1,4 +1,7 @@
 // server.js - Entry point for Dear Diary backend
+const path = require('path');
+module.paths.push(path.resolve(__dirname, '../node_modules'));
+module.paths.push(path.resolve(__dirname, './node_modules'));
 
 const express = require('express');
 const cors = require('cors');
