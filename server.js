@@ -1,2 +1,4 @@
 // Root entry point wrapper for Render web service deployment
-require('./backend/server.js');
+const path = require('path');
+process.chdir(path.join(__dirname, 'backend'));
+require('./server.js');
