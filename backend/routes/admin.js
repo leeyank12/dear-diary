@@ -7,10 +7,19 @@ const Feedback = require('../models/Feedback');
 const Notification = require('../models/Notification');
 const { protect } = require('../middleware/auth');
 
+// Admin Authorization Middleware (Strictly checks for admin email leeyank08@gmail.com)
+const adminCheck = (req, res, next) => {
+  const allowedAdmin = (process.env.ADMIN_EMAIL || 'leeyank08@gmail.com').toLowerCase();
+  if (req.user && req.user.email && req.user.email.toLowerCase() === allowedAdmin) {
+    return next();
+  }
+  return res.status(403).json({ message: 'Access Denied: Admin privileges required.' });
+};
+
 // @desc    Get admin overview analytics & management lists
 // @route   GET /api/admin/overview
-// @access  Private (Admin / Authenticated)
-router.get('/overview', protect, async (req, res) => {
+// @access  Private (Admin Only)
+router.get('/overview', protect, adminCheck, async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     const totalEntries = await Diary.countDocuments();
@@ -63,8 +72,8 @@ router.get('/overview', protect, async (req, res) => {
 
 // @desc    Delete user account (Admin function)
 // @route   DELETE /api/admin/users/:id
-// @access  Private (Admin)
-router.delete('/users/:id', protect, async (req, res) => {
+// @access  Private (Admin Only)
+router.delete('/users/:id', protect, adminCheck, async (req, res) => {
   try {
     const userId = req.params.id;
     await User.findByIdAndDelete(userId);

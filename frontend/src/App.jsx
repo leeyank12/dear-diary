@@ -36,7 +36,10 @@ function ProtectedContent({ user, sidebarOpen, setSidebarOpen }) {
           <Route path="/entries" element={<DiaryList />} />
           <Route path="/new-entry" element={<NewEntry />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route 
+            path="/admin" 
+            element={user?.email?.toLowerCase() === 'leeyank08@gmail.com' ? <Admin /> : <Navigate to="/dashboard" replace />} 
+          />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>

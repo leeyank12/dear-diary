@@ -73,14 +73,16 @@ export default function Sidebar({ isOpen = true, onToggle }) {
             <User size={20} />
             {!collapsed && <span>Profile & Settings</span>}
           </NavLink>
-          <NavLink 
-            to="/admin" 
-            style={({isActive}) => ({...styles.navLink, ...(isActive ? styles.navLinkActive : {})})}
-            title="Admin Panel"
-          >
-            <ShieldAlert size={20} />
-            {!collapsed && <span>Admin Panel</span>}
-          </NavLink>
+          {user?.email?.toLowerCase() === 'leeyank08@gmail.com' && (
+            <NavLink 
+              to="/admin" 
+              style={({isActive}) => ({...styles.navLink, ...(isActive ? styles.navLinkActive : {})})}
+              title="Admin Panel"
+            >
+              <ShieldAlert size={20} />
+              {!collapsed && <span>Admin Panel</span>}
+            </NavLink>
+          )}
         </nav>
 
         {/* User Footer */}
