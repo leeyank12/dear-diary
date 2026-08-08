@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Root package runner for Dear Diary MERN stack project",
   "scripts": {
-    "build": "npm install && cd backend && npm install",
+    "build": "npm install",
     "postinstall": "cd backend && npm install",
     "start": "node backend/server.js",
     "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
