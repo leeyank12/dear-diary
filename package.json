@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "description": "Root package runner for Dear Diary MERN stack project",
   "scripts": {
+    "build": "npm install && cd backend && npm install",
     "postinstall": "cd backend && npm install",
-    "start": "cd backend && npm start",
+    "start": "node backend/server.js",
     "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
     "backend": "npm run dev --prefix backend",
     "frontend": "npm run dev --prefix frontend",
-    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "build": "cd backend && npm install",
-    "build-frontend": "npm run build --prefix frontend"
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
